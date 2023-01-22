@@ -6,7 +6,23 @@ import shareVedio from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
 import { render } from 'react-dom';
 
+
+
 const Login = () => {
+
+  const responseGoogle  =(response)=>{
+    localStorage.setItem('user', JSON.stringify(response.profileObj))
+
+    const {name, googleId, imageUrl } = response.profileObj;
+
+    const doc = {
+      _id: googleId,
+      _type: 'user',
+      userName: name,
+      image: imageUrl,
+    }
+  }
+
   return (
     <div className='flex flex-col items-center h-screen'>
 
@@ -26,20 +42,20 @@ const Login = () => {
           <div className='shadow-2xl'>
 
             <GoogleLogin
-              clientId=''
+              clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
               render={(renderProps) => (
                 <button
                   type="button"
                   className='bg-mainColor flex justify-center items-center p-3 m-3 rounded-lg cursor-pointer outline-none'
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  cookiePolicy
                 >
                  <FcGoogle className='mr-4'/> sign in with google
                 </button>
               )}
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy="single_host_origin"
             />
           </div>
         </div>
